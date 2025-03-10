@@ -1,10 +1,17 @@
+// 페이지 스켈레톤 담당
 import React from "react";
 import { Outlet } from "react-router-dom";
-import NavBar from "./NavBar";
+import NavBar from "../components/NavBar";
+import { useTheme } from "../context/ThemeContext";
 
 const Layout = () => {
+  const { isDarkMode } = useTheme();
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div
+      className={`min-h-screen ${
+        isDarkMode ? "bg-gray-900 text-white" : "bg-pink-100 text-pink-900"
+      }`}
+    >
       {/* ✅ 상단 네비게이션 바 고정 */}
       <NavBar />
 

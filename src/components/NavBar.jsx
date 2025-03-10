@@ -1,30 +1,71 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import useDebounce from "../hooks/useDebounce";
+import { useTheme } from "../context/ThemeContext"; // ✅ 다크모드 상태 가져오기
 
 const NavBar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { isDarkMode, toggleDarkMode } = useTheme(); // ✅ 다크모드 상태, 토글함수 사용
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  // ✅ 검색어 처리 로직 생략...
+
   return (
-    <nav className="bg-gray-900 text-white px-7 py-10 flex items-center justify-between">
-      {/* ✅ 로고 */}
+    <nav
+      className={`flex flex-wrap items-center justify-between gap-4 px-7 py-10 bg-gray-900 text-white ${
+        isDarkMode ? "bg-gray-800 text-white" : "bg-gray-600 text-white"
+      }`}
+    >
+      {/* 로고 */}
       <Link to="/" className="text-5xl font-bold flex items-center">
         <span className="text-white">OZ</span>
-        <span className="mx-2"></span> {/* ✅ 여백 추가 */}
+        <span className="mx-2"></span>
         <span className="text-purple-400">무비</span>
       </Link>
+      <div className="flex items-center gap-2">
+        {/* 검색창 */}
+        <input
+          type="text"
+          placeholder="검색..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className={`w-64 px-4 py-2 rounded-lg outline-none ${
+            isDarkMode ? "bg-gray-700 text-white" : "bg-gray-700 text-white"
+          }`}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              navigate(`/?search=${searchTerm}`);
+            }
+          }}
+        />
 
-      {/* ✅ 검색창 */}
-      <input
-        type="text"
-        placeholder="검색..."
-        className="w-64 px-4 py-2 bg-gray-700 rounded-lg outline-none text-white"
-      />
+        {/* 돋보기 버튼 */}
+        <button
+          onClick={() => {
+            if (searchTerm.trim() !== "") {
+              navigate(`/?search=${searchTerm}`); // 클릭하면 검색 실행
+              setSearchTerm(""); // ✅ 입력창 초기화!
+            }
+          }}
+          className="p-2 bg-purple-300 hover:bg-purple-500 rounded-lg text-white"
+        >
+          🔍
+        </button>
+      </div>
 
-      {/* ✅ 로그인 & 회원가입 버튼 */}
+      {/* 로그인 & 토글 */}
       <div className="flex gap-2">
-        <button className="bg-purple-600 hover:bg-purple-800 px-4 py-2 rounded-lg text-white text-sm">
-          로그인
+        <button
+          onClick={toggleDarkMode}
+          className="bg-purple-400 hover:bg-purple-600 px-4 py-2 rounded-lg text-white text-sm"
+        >
+          {isDarkMode ? "라이트 모드" : "다크 모드"}
         </button>
         <button className="bg-purple-600 hover:bg-purple-800 px-4 py-2 rounded-lg text-white text-sm">
-          회원가입
+          로그인
         </button>
       </div>
     </nav>

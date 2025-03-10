@@ -25,7 +25,7 @@ const MovieSlider = ({ movies }) => {
       <Swiper
         modules={[Navigation, Pagination]} // 모듈 적용 (네비/페이지네이션)
         spaceBetween={10} // 슬라이드 간격
-        slidesPerView={6} // 기본 슬라이드 개수
+        slidesPerView={2} // 기본값: 모바일
         navigation // 좌/우 화살표 버튼 활성화
         pagination={{ clickable: true }} // 하단 페이지네이션 활성화
         breakpoints={{
