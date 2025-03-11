@@ -31,15 +31,18 @@ const NavBar = () => {
           type="text"
           placeholder="검색..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className={`w-64 px-4 py-2 rounded-lg outline-none ${
-            isDarkMode ? "bg-gray-700 text-white" : "bg-gray-700 text-white"
-          }`}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
+            if (e.key === "Enter" && searchTerm.trim() !== "") {
               navigate(`/?search=${searchTerm}`);
+              setSearchTerm(""); // ✅ 검색 후 초기화!
             }
           }}
+          className={`w-64 px-4 py-2 rounded-lg outline-none transition-all duration-300
+            ${
+              isDarkMode
+                ? "bg-gray-700 text-white placeholder-gray-400 border border-gray-400"
+                : "bg-pink-100 text-pink-900 placeholder-pink-400 border border-pink-400"
+            }`}
         />
 
         {/* 돋보기 버튼 */}
@@ -50,7 +53,12 @@ const NavBar = () => {
               setSearchTerm(""); // ✅ 입력창 초기화!
             }
           }}
-          className="p-2 bg-purple-300 hover:bg-purple-500 rounded-lg text-white"
+          className={`p-2 rounded-lg text-sm font-semibold transition-all duration-300
+            ${
+              isDarkMode
+                ? "bg-purple-600 hover:bg-purple-800 text-white"
+                : "bg-purple-400 hover:bg-purple-600 text-white"
+            }`}
         >
           🔍
         </button>
