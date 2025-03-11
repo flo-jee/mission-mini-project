@@ -12,29 +12,30 @@ const NavBar = () => {
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   // ✅ 검색어 처리 로직 생략...
-
   return (
     <nav
-      className={`flex flex-wrap items-center justify-between gap-4 px-7 py-10 bg-gray-900 text-white ${
-        isDarkMode ? "bg-gray-800 text-white" : "bg-gray-600 text-white"
-      }`}
+      className={`flex flex-wrap items-center justify-between gap-4 px-7 py-10 transition-all duration-300
+        ${isDarkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"}
+      `}
     >
-      {/* 로고 */}
+      {/* ✅ 로고 */}
       <Link to="/" className="text-5xl font-bold flex items-center">
-        <span className="text-white">OZ</span>
+        <span className={isDarkMode ? "text-white" : "text-gray-900"}>OZ</span>
         <span className="mx-2"></span>
         <span className="text-purple-400">무비</span>
       </Link>
+
+      {/* ✅ 검색창 & 돋보기 버튼 */}
       <div className="flex items-center gap-2">
-        {/* 검색창 */}
         <input
           type="text"
           placeholder="검색..."
           value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && searchTerm.trim() !== "") {
               navigate(`/?search=${searchTerm}`);
-              setSearchTerm(""); // ✅ 검색 후 초기화!
+              setSearchTerm("");
             }
           }}
           className={`w-64 px-4 py-2 rounded-lg outline-none transition-all duration-300
@@ -45,12 +46,11 @@ const NavBar = () => {
             }`}
         />
 
-        {/* 돋보기 버튼 */}
         <button
           onClick={() => {
             if (searchTerm.trim() !== "") {
-              navigate(`/?search=${searchTerm}`); // 클릭하면 검색 실행
-              setSearchTerm(""); // ✅ 입력창 초기화!
+              navigate(`/?search=${searchTerm}`);
+              setSearchTerm("");
             }
           }}
           className={`p-2 rounded-lg text-sm font-semibold transition-all duration-300
@@ -64,14 +64,20 @@ const NavBar = () => {
         </button>
       </div>
 
-      {/* 로그인 & 토글 */}
+      {/* ✅ 로그인 & 다크모드 토글 */}
       <div className="flex gap-2">
         <button
           onClick={toggleDarkMode}
-          className="bg-purple-400 hover:bg-purple-600 px-4 py-2 rounded-lg text-white text-sm"
+          className={`px-4 py-2 rounded-lg text-sm transition-all duration-300
+            ${
+              isDarkMode
+                ? "bg-yellow-500 hover:bg-yellow-700 text-black"
+                : "bg-purple-400 hover:bg-purple-600 text-white"
+            }`}
         >
           {isDarkMode ? "라이트 모드" : "다크 모드"}
         </button>
+
         <button className="bg-purple-600 hover:bg-purple-800 px-4 py-2 rounded-lg text-white text-sm">
           로그인
         </button>
