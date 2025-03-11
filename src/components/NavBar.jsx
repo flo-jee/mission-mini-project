@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // ✅ useEffect 추가!
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import useDebounce from "../hooks/useDebounce";
 import { useTheme } from "../context/ThemeContext"; // ✅ 다크모드 상태 가져오기
@@ -6,12 +6,23 @@ import { useTheme } from "../context/ThemeContext"; // ✅ 다크모드 상태 �
 const NavBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isDarkMode, toggleDarkMode } = useTheme(); // ✅ 다크모드 상태, 토글함수 사용
+  const { isDarkMode, toggleDarkMode } = useTheme();
 
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-  // ✅ 검색어 처리 로직 생략...
+  // ✅ 디바운스된 값이 바뀌면 navigate 실행
+  useEffect(() => {
+    if (debouncedSearchTerm) {
+      navigate(`/?search=${debouncedSearchTerm}`);
+    }
+
+    // ✅ 검색어가 완전히 지워졌다면 인기 영화 목록 보여주기
+    if (!debouncedSearchTerm && location.pathname === "/") {
+      navigate(`/`);
+    }
+  }, [debouncedSearchTerm, navigate, location.pathname]);
+
   return (
     <nav
       className={`flex flex-wrap items-center justify-between gap-4 px-7 py-10 transition-all duration-300
@@ -25,19 +36,13 @@ const NavBar = () => {
         <span className="text-purple-400">무비</span>
       </Link>
 
-      {/* ✅ 검색창 & 돋보기 버튼 */}
+      {/* ✅ 검색창 */}
       <div className="flex items-center gap-2">
         <input
           type="text"
           placeholder="검색..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && searchTerm.trim() !== "") {
-              navigate(`/?search=${searchTerm}`);
-              setSearchTerm("");
-            }
-          }}
           className={`w-64 px-4 py-2 rounded-lg outline-none transition-all duration-300
             ${
               isDarkMode
@@ -46,12 +51,11 @@ const NavBar = () => {
             }`}
         />
 
+        {/* ✅ 돋보기 버튼은 입력 초기화 전용 */}
         <button
           onClick={() => {
-            if (searchTerm.trim() !== "") {
-              navigate(`/?search=${searchTerm}`);
-              setSearchTerm("");
-            }
+            setSearchTerm(""); // 검색어 초기화
+            navigate(`/`); // 인기 영화로 리셋
           }}
           className={`p-2 rounded-lg text-sm font-semibold transition-all duration-300
             ${
