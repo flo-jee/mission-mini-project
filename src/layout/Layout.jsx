@@ -4,16 +4,16 @@ import { Outlet } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { useTheme } from "../context/ThemeContext";
 
-const Layout = () => {
+const Layout = ({ logout }) => {
   const { isDarkMode } = useTheme();
   return (
     <div
       className={`min-h-screen ${
-        isDarkMode ? "bg-gray-900 text-white" : "bg-pink-100 text-pink-900"
+        isDarkMode ? "bg-gray-900 text-white" : "bg-pink-100 "
       }`}
     >
       {/* ✅ 상단 네비게이션 바 고정 */}
-      <NavBar />
+      <NavBar logout={logout} />
 
       {/* ✅ Outlet을 사용해 페이지별 콘텐츠 표시 */}
       <div className="p-8">

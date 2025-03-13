@@ -1,62 +1,71 @@
 import React from "react";
-// Swiper 핵심 컴포넌트 임포트
 import { Swiper, SwiperSlide } from "swiper/react";
-// Swiper 모듈 (네비게이션/페이지네이션 기능)
-import { Navigation, Pagination } from "swiper/modules";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { useTheme } from "../context/ThemeContext";
 
-// Swiper 스타일 시트 임포트
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-// TMDB 포스터 이미지 base URL
 const BASE_IMG_URL = "https://image.tmdb.org/t/p/w500";
 
-/* MovieSlider 컴포넌트
- * @param {Array} movies - 상위 컴포넌트(MovieList)에서 받아온 영화 리스트
- */
 const MovieSlider = ({ movies }) => {
-  return (
-    <div className="w-full px-6 py-4">
-      {/* 슬라이더 제목 */}
-      <h2 className="text-3xl font-bold text-pink-800 mb-4">🔥 인기 영화</h2>
+  const { isDarkMode } = useTheme();
 
-      {/* Swiper 슬라이더 설정 */}
+  return (
+    <div className="">
+      <h2
+        className={`text-3xl font-bold mb-3 transition-colors duration-300
+          ${isDarkMode ? "text-whith" : "text-gray-700"}`}
+      >
+        🔥 인기 영화
+      </h2>
+
       <Swiper
-        modules={[Navigation, Pagination]} // 모듈 적용 (네비/페이지네이션)
-        spaceBetween={10} // 슬라이드 간격
-        slidesPerView={2} // 기본값: 모바일
-        navigation // 좌/우 화살표 버튼 활성화
-        pagination={{ clickable: true }} // 하단 페이지네이션 활성화
+        modules={[Navigation, Pagination, Autoplay]}
+        spaceBetween={10}
+        slidesPerView={2}
+        navigation
+        pagination={{ clickable: true }}
+        autoplay={{
+          delay: 3000, // 3초마다 자동으로 슬라이드 넘김
+          disableOnInteraction: false, // 유저가 조작해도 자동 재시작
+          pauseOnMouseEnter: true, // 마우스 올라가면 멈춤
+        }}
+        loop={true} // 끝에서 다시 처음으로 돌아가는 무한 루프
         breakpoints={{
-          // 반응형 설정
           640: { slidesPerView: 2 },
           768: { slidesPerView: 3 },
           1024: { slidesPerView: 4 },
           1280: { slidesPerView: 6 },
         }}
-        className="w-full"
+        className="w-full pb-14"
       >
-        {/* 영화 목록 순회해서 슬라이드 생성 */}
         {movies.map((movie) => (
           <SwiperSlide key={movie.id} className="flex flex-col items-center">
-            {/* 영화 포스터 이미지 */}
-            <img
-              src={
-                movie.poster_path
-                  ? `${BASE_IMG_URL}${movie.poster_path}` // 포스터 있을 경우
-                  : "https://via.placeholder.com/500x750?text=No+Image" // 포스터 없을 경우 기본 이미지
-              }
-              alt={movie.title}
-              className="w-[12rem] h-[18rem] object-cover rounded-lg shadow-lg"
-            />
+            <div className="relative w-[12rem] h-[18rem] rounded-lg overflow-hidden shadow-lg group">
+              {/* ✅ 영화 포스터 */}
+              <img
+                src={
+                  movie.poster_path
+                    ? `${BASE_IMG_URL}${movie.poster_path}`
+                    : "https://via.placeholder.com/500x750?text=No+Image"
+                }
+                alt={movie.title}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
 
-            {/* 영화 제목과 평점 */}
-            <div className="text-center mt-2">
-              <h3 className="text-pink-800 text-sm font-bold truncate w-[12rem]">
-                {movie.title}
-              </h3>
-              <p className="text-yellow-600 text-xs">⭐ {movie.vote_average}</p>
+              {/* ✅ 평점 배지 */}
+              <div className="absolute top-2 right-2 bg-yellow-100/20 text-black text-xs font-bold px-2 py-1 rounded-full shadow-lg backdrop-blur-sm">
+                ⭐ {movie.vote_average}
+              </div>
+
+              {/* ✅ 제목 오버레이 */}
+              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 via-black/50 to-transparent p-2">
+                <h3 className="text-white text-sm font-bold truncate">
+                  {movie.title}
+                </h3>
+              </div>
             </div>
           </SwiperSlide>
         ))}

@@ -3,12 +3,13 @@ import { useLocation } from "react-router-dom"; // ✅ 현재 URL 정보 가져�
 import useDebounce from "../hooks/useDebounce"; // ✅ 디바운스 커스텀 훅
 import MovieCard from "../components/MovieCard";
 import SkeletonCard from "../components/SkeletonCard";
+import { useTheme } from "../context/ThemeContext";
 
 // ✅ TMDB API 토큰 (.env 파일에 저장한 값)
 const ACCESS_TOKEN = import.meta.env.VITE_TMDB_ACCESS_TOKEN;
 
 const SearchResult = () => {
-  // ✅ 상태 선언
+  const { isDarkMode } = useTheme(); // ✅ 다크모드 상태 가져오기
   const [movies, setMovies] = useState([]); // 영화 데이터
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [error, setError] = useState(null); // 에러 상태
@@ -22,7 +23,6 @@ const SearchResult = () => {
   // ✅ 캐시 초기화 (검색어가 없을 때 캐시 삭제)
   useEffect(() => {
     if (!debouncedSearchTerm) {
-      console.log("🗑️ 검색어가 비어있음 → 캐시 삭제");
       sessionStorage.removeItem(`search-${debouncedSearchTerm}`);
     }
   }, [debouncedSearchTerm]);
@@ -33,19 +33,17 @@ const SearchResult = () => {
       setLoading(true);
       setError(null);
 
-      // ✅ 캐시 데이터가 있는지 먼저 확인
       const cacheKey = `search-${debouncedSearchTerm}`;
-      const cachedMovies = sessionStorage.getItem(cacheKey);
 
+      // ✅ 캐시 데이터 확인
+      const cachedMovies = sessionStorage.getItem(cacheKey);
       if (cachedMovies) {
-        console.log("✅ 캐시에서 검색 결과 사용 중:", debouncedSearchTerm);
         setMovies(JSON.parse(cachedMovies));
         setLoading(false);
         return;
       }
 
       try {
-        // ✅ TMDB 검색 API 호출
         const response = await fetch(
           `https://api.themoviedb.org/3/search/movie?query=${debouncedSearchTerm}&language=ko-KR`,
           {
@@ -63,14 +61,18 @@ const SearchResult = () => {
 
         const data = await response.json();
 
-        // ✅ 성인 영화 제외
         const safeMovies = data.results.filter((movie) => !movie.adult);
-
-        // ✅ 상태 업데이트 및 캐시 저장
         setMovies(safeMovies);
+
+        // ✅ 캐시에 저장
         sessionStorage.setItem(cacheKey, JSON.stringify(safeMovies));
+
+        // ✅ 검색 후 새로고침 (단, 한 번만 실행!)
+        if (!sessionStorage.getItem("hasRefreshed")) {
+          sessionStorage.setItem("hasRefreshed", "true");
+          window.location.reload();
+        }
       } catch (error) {
-        console.error("🔥 검색 영화 데이터 가져오기 실패:", error);
         setError(error.message);
       } finally {
         setLoading(false);
@@ -82,10 +84,20 @@ const SearchResult = () => {
     }
   }, [debouncedSearchTerm]);
 
+  // ✅ 새로고침 후 플래그 초기화
+  useEffect(() => {
+    return () => {
+      sessionStorage.removeItem("hasRefreshed");
+    };
+  }, []);
+
   // ✅ 로딩 중
   if (loading) {
     return (
-      <div className="min-h-screen bg-pink-100 text-pink-900 p-10">
+      <div
+        className={`min-h-screen p-10 transition-colors duration-300
+        ${isDarkMode ? "bg-gray-800 text-white" : "bg-pink-100 text-pink-900"}`}
+      >
         <h1 className="text-3xl font-bold mb-10 text-center">🔍 검색 중...</h1>
         <div className="flex flex-wrap justify-center gap-4">
           {[...Array(8)].map((_, index) => (
@@ -99,24 +111,34 @@ const SearchResult = () => {
   // ✅ 에러 발생 시
   if (error) {
     return (
-      <div className="text-center text-red-500 p-10">❌ 오류 발생: {error}</div>
+      <div
+        className={`text-center p-10 transition-colors duration-300 
+        ${isDarkMode ? "text-red-400" : "text-red-500"}`}
+      >
+        ❌ 오류 발생: {error}
+      </div>
     );
   }
 
   // ✅ 검색 결과 화면
   return (
-    <div className="min-h-screen bg-pink-100 text-pink-900 p-10">
-      {/* ✅ 페이지 타이틀 */}
+    <div
+      className={`min-h-screen p-10 transition-colors duration-300
+      ${isDarkMode ? "bg-gray-800 text-white" : "bg-pink-100 text-pink-900"}`}
+    >
       <h1 className="text-3xl font-bold mb-10 text-center">
         🔎 "{debouncedSearchTerm}" 검색 결과
       </h1>
 
-      {/* ✅ 검색 결과 리스트 */}
       <div className="flex flex-wrap justify-center gap-4">
         {movies.length > 0 ? (
           movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)
         ) : (
-          <p className="text-center text-gray-700 text-lg">
+          <p
+            className={`text-center text-lg ${
+              isDarkMode ? "text-gray-300" : "text-gray-700"
+            }`}
+          >
             검색 결과가 없습니다.
           </p>
         )}

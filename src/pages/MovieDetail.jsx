@@ -1,68 +1,85 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link, useLocation } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 
-// ✅ TMDB 인증 토큰과 이미지 URL
+// ✅ TMDB API 설정
 const ACCESS_TOKEN = import.meta.env.VITE_TMDB_ACCESS_TOKEN;
 const BASE_IMG_URL = "https://image.tmdb.org/t/p/w500";
 const BASE_BACKDROP_URL = "https://image.tmdb.org/t/p/w1280";
 
 const MovieDetail = () => {
-  const { id } = useParams(); // URL에서 영화 id 가져오기
-  const location = useLocation(); // state로 movie 데이터를 전달받기 위해
-  const [movie, setMovie] = useState(location.state?.movie || null); // state에 movie가 있으면 바로 사용
-  const [loading, setLoading] = useState(!movie); // movie가 없으면 로딩 true
+  const { id } = useParams();
+  const location = useLocation();
+
+  const movieFromState = location.state?.movie || null;
+
+  // ✅ 초기값: state에서 넘어오면 바로 넣고, 아니면 null로 시작!
+  const [movie, setMovie] = useState(movieFromState);
+  const [loading, setLoading] = useState(!movieFromState);
   const [error, setError] = useState(null);
 
-  // ✅ movie 데이터가 없을 때만 fetch
-  useEffect(() => {
-    if (movie) return; // 이미 데이터가 있으면 fetch 안 함
+  // ✅ 디버깅용 로그
+  console.log("✅ [MovieDetail] URL Params id:", id);
+  console.log("✅ [MovieDetail] location.state:", location.state);
+  console.log("✅ [MovieDetail] movieFromState:", movieFromState);
 
-    const fetchMovieDetail = async () => {
+  // ✅ 영화 상세 정보 불러오기
+  const fetchMovieDetail = async () => {
+    try {
       setLoading(true);
       setError(null);
 
-      try {
-        const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${id}?language=ko-KR`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${ACCESS_TOKEN}`,
-              "Content-Type": "application/json;charset=utf-8",
-            },
+      console.log("📡 [MovieDetail] API 요청 시작! 영화 ID:", id);
+
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/${id}?language=ko-KR`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${ACCESS_TOKEN}`,
+            "Content-Type": "application/json;charset=utf-8",
           },
-        );
+        },
+      );
 
-        if (!response.ok) {
-          throw new Error(`HTTP 오류! 상태 코드: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setMovie(data);
-      } catch (error) {
-        console.error("🔥 영화 상세 데이터 가져오기 실패:", error);
-        setError(error.message);
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error(`HTTP 오류! 상태 코드: ${response.status}`);
       }
-    };
 
-    fetchMovieDetail();
+      const data = await response.json();
+      console.log("✅ [MovieDetail] fetch 성공:", data);
+
+      setMovie(data);
+    } catch (error) {
+      console.error("❌ [MovieDetail] fetch 실패:", error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ✅ movie가 없으면 fetch
+  useEffect(() => {
+    if (!movie && id) {
+      console.log("🔔 [MovieDetail] movie가 없어서 fetchMovieDetail 실행");
+      fetchMovieDetail();
+    } else {
+      console.log("👌 [MovieDetail] state에서 받은 movie 사용 중");
+    }
   }, [id, movie]);
 
-  // ✅ 로딩 상태일 때
+  // ✅ 로딩 중 화면
   if (loading) {
     return <p className="text-white text-center mt-10">로딩 중...</p>;
   }
 
-  // ✅ 에러 상태일 때
+  // ✅ 에러 화면
   if (error) {
     return (
       <div className="text-center text-red-500 p-10">❌ 오류 발생: {error}</div>
     );
   }
 
-  // ✅ movie 데이터가 없을 경우 (예외 처리)
+  // ✅ 영화 정보가 없을 경우
   if (!movie) {
     return (
       <div className="text-center text-red-500 p-10">
@@ -71,6 +88,7 @@ const MovieDetail = () => {
     );
   }
 
+  // ✅ 정상적으로 데이터를 가져왔을 경우
   return (
     <div
       className="min-h-screen text-white"
@@ -80,8 +98,8 @@ const MovieDetail = () => {
         backgroundPosition: "center",
       }}
     >
-      <div className="bg-black bg-opacity-80 min-h-screen flex flex-col md:flex-row p-10 gap-10">
-        {/* ✅ 왼쪽: 포스터 */}
+      <div className="bg-black bg-opacity-80 min-h-screen flex flex-col md:flex-row p-10">
+        {/* ✅ 포스터 이미지 */}
         <div className="md:w-1/2 flex justify-center items-center">
           <img
             src={
@@ -90,11 +108,11 @@ const MovieDetail = () => {
                 : "https://via.placeholder.com/500x750?text=No+Image"
             }
             alt={movie.title}
-            className="rounded-lg shadow-lg md:w-[300px] aspect-[2/3] object-cover"
+            className="rounded-lg shadow-lg w-[80%] aspect-[2/3] object-cover"
           />
         </div>
 
-        {/* ✅ 오른쪽: 영화 정보 */}
+        {/* ✅ 영화 설명 */}
         <div className="md:w-1/2 p-6 flex flex-col justify-center gap-4">
           <h1 className="text-4xl font-bold">{movie.title}</h1>
           <p className="text-lg text-yellow-400">

@@ -1,42 +1,51 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext"; // ✅ 다크모드 context 사용
 
-// ✅ 이미지 URL 기본값
 const BASE_IMG_URL = "https://image.tmdb.org/t/p/w500";
+const PLACEHOLDER_IMG_URL = "https://via.placeholder.com/500x750?text=No+Image";
+const DETAILS_PATH = "/details";
+
+const getPosterUrl = (posterPath) => {
+  return posterPath ? `${BASE_IMG_URL}${posterPath}` : PLACEHOLDER_IMG_URL;
+};
 
 const MovieCard = ({ movie }) => {
+  const { isDarkMode } = useTheme();
+  const posterUrl = getPosterUrl(movie.poster_path);
+  const movieTitle = movie.title || "제목 없음";
+
   return (
-    <div className="w-full sm:w-[15rem] bg-pink-200 text-pink-900 rounded-lg overflow-hidden shadow-lg flex flex-col items-center p-2">
-      {/* ✅ 영화 포스터 이미지 */}
-      <img
-        src={
-          movie.poster_path
-            ? `${BASE_IMG_URL}${movie.poster_path}` // 포스터가 있으면 출력
-            : "https://via.placeholder.com/500x750?text=No+Image" // 없으면 기본 이미지
-        }
-        alt={movie.title}
-        className="w-full h-[20rem] object-cover rounded-md"
-      />
+    <Link
+      to={`${DETAILS_PATH}/${movie.id}`}
+      state={{ movie }}
+      className={`relative w-full sm:w-[15rem] rounded-xl overflow-hidden flex flex-col justify-between shadow-lg transition-all duration-300 cursor-pointer
+        ${isDarkMode ? "bg-gray-700 text-white" : "bg-purple-100 text-gray-700"}
+        hover:scale-105 hover:shadow-2xl`}
+    >
+      {/* ✅ 포스터 이미지 */}
+      <div className="relative">
+        <img
+          src={posterUrl}
+          alt={movieTitle}
+          className="w-full h-[22rem] object-cover"
+        />
 
-      {/* ✅ 영화 정보 텍스트 */}
-      <div className="mt-2 text-center">
-        <h3 className="text-[1rem] sm:text-lg font-bold">{movie.title}</h3>
-
-        {/* ✅ 평점 */}
-        <p className="text-yellow-900 text-[0.8rem] sm:text-sm">
-          ⭐ {movie.vote_average}
-        </p>
-
-        {/* ✅ 상세 보기 버튼 (state로 영화 정보 전달) */}
-        <Link
-          to={`/details/${movie.id}`} // 동적 라우터로 이동
-          state={{ movie }} // 영화 데이터를 함께 전달 (React Router state)
-          className="text-blue-900 text-[0.7rem] hover:underline mt-1 inline-block"
+        {/* ✅ 평점 뱃지 */}
+        <div
+          className={`absolute top-2 right-2 px-2 py-1 text-xs rounded-full font-semibold shadow-md
+          ${isDarkMode ? "bg-yellow-600 text-yellow-900" : "bg-yellow-100 text-yellow-900"}`}
         >
-          상세 보기
-        </Link>
+          ⭐ {movie.vote_average?.toFixed(1)}
+        </div>
       </div>
-    </div>
+
+      {/* ✅ 텍스트 영역 */}
+      <div className="flex flex-col gap-2 p-3">
+        <h3 className="text-lg font-bold truncate">{movieTitle}</h3>
+        {/* 버튼 삭제하고 카드 전체를 링크로 변경 */}
+      </div>
+    </Link>
   );
 };
 
