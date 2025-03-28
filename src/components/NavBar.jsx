@@ -57,7 +57,7 @@ const NavBar = () => {
 
   return (
     <nav
-      className={`h-full flex items-center justify-between px-4 shadow-md gap-3 ${
+      className={`h-20 flex items-center justify-between px-4 shadow-md gap-3 ${
         isDarkMode ? "bg-[#333333] text-[#F7C8C9]" : "bg-white text-gray-500"
       }`}
     >
