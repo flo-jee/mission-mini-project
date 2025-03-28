@@ -211,6 +211,7 @@ const NavBar = () => {
             isDarkMode ? "bg-[#333333] text-white" : "bg-white text-gray-900"
           }`}
         >
+          {/* 모바일 검색창 */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -240,7 +241,34 @@ const NavBar = () => {
             </button>
           </form>
 
-          {!user && (
+          {/* 로그인 상태에 따른 메뉴 표시 */}
+          {user ? (
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => {
+                  navigate("/mypage");
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`px-4 py-2 rounded-lg text-sm transition hover:scale-105 duration-300 font-semibold whitespace-nowrap ${
+                  isDarkMode
+                    ? "bg-[#8F1D22] hover:bg-[#E2AF3B] text-white"
+                    : "bg-[#F2BDC5] hover:bg-[#A06B00] hover:text-white text-[#323333]"
+                }`}
+              >
+                마이페이지
+              </button>
+              <button
+                onClick={handleLogout}
+                className={`px-4 py-2 rounded-lg text-sm transition hover:scale-105 duration-300 font-semibold whitespace-nowrap ${
+                  isDarkMode
+                    ? "bg-[#8F1D22] hover:bg-[#E2AF3B] text-white"
+                    : "bg-[#F2BDC5] hover:bg-[#A06B00] hover:text-white text-[#323333]"
+                }`}
+              >
+                로그아웃
+              </button>
+            </div>
+          ) : (
             <div className="flex flex-col gap-2">
               <button
                 onClick={() => navigate("/login")}
@@ -262,9 +290,9 @@ const NavBar = () => {
               >
                 회원가입
               </button>
-            </div> // 모바일 메뉴 드롭다운
+            </div>
           )}
-        </div> // 모바일 버튼 영역
+        </div>
       )}
     </nav>
   );
