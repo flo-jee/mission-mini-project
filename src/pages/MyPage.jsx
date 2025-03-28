@@ -20,19 +20,22 @@ const MyPage = () => {
   return (
     <div
       className={`min-h-screen flex flex-col items-center justify-center p-6 transition-colors duration-300
-      ${isDarkMode ? "bg-[#333333] text-white" : "bg-pink-50 text-pink-900"}`}
+      ${isDarkMode ? "bg-[#333333] text-white" : "bg-[#FFF3F7] text-[#333333]"}`}
     >
       <h1 className="text-3xl font-bold mb-8">👤 마이페이지</h1>
 
       <div
         className={`rounded-lg shadow-lg p-6 w-full max-w-md transition-colors duration-300
-      ${isDarkMode ? "bg-[#4C4C4C] text-white" : "bg-white text-pink-900"}`}
+      ${isDarkMode ? "bg-[#4C4C4C] text-white" : "bg-white text-[#333333]"}`}
       >
-        <div className="flex flex-col items-center gap-4">
+        <div
+          className={`flex flex-col items-center border-4 gap-4
+        ${isDarkMode ? "border-[#841724]" : "border-[#F2BDC5]"}`}
+        >
           <img
             src={user.profileImageUrl || DEFAULT_PROFILE_IMAGE}
             alt="프로필 이미지"
-            className="w-32 h-32 rounded-full border-4 border-purple-400 object-cover"
+            className={"w-32 h-32 rounded-full object-cover"}
           />
 
           <p className="text-xl font-semibold">✉️ 이메일: {user.email}</p>

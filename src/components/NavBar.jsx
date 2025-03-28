@@ -62,11 +62,11 @@ const NavBar = () => {
       }`}
     >
       {/* 왼쪽: 로고 */}
-      <Link to="/" className="h-full flex items-center">
+      <Link to="/" className="h-20 flex items-center">
         <img
           src={isDarkMode ? darkLogo : lightLogo}
           alt="FLOLIX 로고"
-          className="w-auto h-full object-contain shrink-0"
+          className="w-auto h-20 object-contain shrink-0"
         />
       </Link>
 
