@@ -127,7 +127,7 @@ const MovieDetail = () => {
 
           <Link
             to="/"
-            className="mt-4 inline-block bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600"
+            className="mt-4 inline-block bg-[#4C4C4C] text-white px-4 py-2 rounded-lg hover:bg-[#161616]"
           >
             ⬅ 메인 페이지로 돌아가기
           </Link>

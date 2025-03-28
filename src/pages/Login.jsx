@@ -94,12 +94,12 @@ const Login = () => {
   return (
     <div
       className={`min-h-screen flex justify-center items-center transition-all duration-300
-        ${isDarkMode ? "bg-gray-900 text-white" : "bg-pink-100 text-gray-900"}`}
+        ${isDarkMode ? " text-white" : "bg-[#E5CACF] text-[#161616]"}`}
     >
       <form
         onSubmit={handleSubmit}
         className={`p-8 rounded-lg shadow-md w-full max-w-md relative transition-all duration-300
-          ${isDarkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900"}`}
+          ${isDarkMode ? "bg-[#333333] text-white" : "bg-[#FFF3F7] text-[#161616]"}`}
       >
         <h2 className="text-2xl font-bold mb-6 text-center">로그인</h2>
 
@@ -145,25 +145,40 @@ const Login = () => {
 
         <button
           type="submit"
-          className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-800 transition mt-4 font-semibold"
+          className={`flex items-center justify-center gap-2 w-full py-3 rounded-full text-sm font-semibold transition mt-3
+    ${
+      isDarkMode
+        ? "bg-[#841724] text-white hover:bg-[#E2AF3B] hover:text-[#333333]"
+        : "bg-[#F2BDC5] text-black hover:bg-[#DDA026]"
+    }`}
         >
-          로그인
+          이메일로 시작하기
         </button>
 
         <div className="mt-6 flex flex-col gap-3">
           <button
             type="button"
             onClick={handleKakaoLogin}
-            className="w-full bg-yellow-400 text-black py-2 rounded-lg hover:bg-yellow-500 font-semibold"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-full bg-[#FEE500] text-sm font-semibold text-black hover:brightness-75 transition"
           >
+            <img
+              src="/icons/kakao_logo.png"
+              alt="카카오 로고"
+              className="h-5 w-auto"
+            />
             카카오로 시작하기
           </button>
 
           <button
             type="button"
             onClick={handleGoogleLogin}
-            className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 font-semibold"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-full bg-[#FFFFFF] text-sm font-semibold text-black hover:brightness-75 transition mt-3"
           >
+            <img
+              src="/icons/google_logo.png"
+              alt="구글 로고"
+              className="w-5 h-auto"
+            />
             구글로 시작하기
           </button>
         </div>

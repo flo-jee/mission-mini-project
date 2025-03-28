@@ -96,7 +96,7 @@ const SearchResult = () => {
     return (
       <div
         className={`min-h-screen p-10 transition-colors duration-300
-        ${isDarkMode ? "bg-gray-800 text-white" : "bg-pink-100 text-pink-900"}`}
+        ${isDarkMode ? "bg-[#333333] text-white" : "bg-[#F7C8C9] text-pink-900"}`}
       >
         <h1 className="text-3xl font-bold mb-10 text-center">🔍 검색 중...</h1>
         <div className="flex flex-wrap justify-center gap-4">
@@ -124,7 +124,7 @@ const SearchResult = () => {
   return (
     <div
       className={`min-h-screen p-10 transition-colors duration-300
-      ${isDarkMode ? "bg-gray-800 text-white" : "bg-pink-100 text-pink-900"}`}
+      ${isDarkMode ? "bg-[#333333] text-white" : "bg-[#F7C8C9] text-pink-900"}`}
     >
       <h1 className="text-3xl font-bold mb-10 text-center">
         🔎 "{debouncedSearchTerm}" 검색 결과
@@ -136,7 +136,7 @@ const SearchResult = () => {
         ) : (
           <p
             className={`text-center text-lg ${
-              isDarkMode ? "text-gray-300" : "text-gray-700"
+              isDarkMode ? "text-gray-300" : "text-[#4C4C4C]"
             }`}
           >
             검색 결과가 없습니다.

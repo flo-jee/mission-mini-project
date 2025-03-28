@@ -16,8 +16,8 @@ const HomePage = () => {
     <div
       className={`min-h-screen p-5 transition-all duration-300 ${
         isDarkMode
-          ? "bg-gray-900 text-white" // ✅ 다크모드 스타일
-          : "bg-pink-100 text-gray-700" // ✅ 라이트모드 스타일
+          ? " text-white" // ✅ 다크모드 스타일
+          : "bg-[#E5CACF] text-[#4C4C4C]" // ✅ 라이트모드 스타일
       }`}
     >
       {search ? (

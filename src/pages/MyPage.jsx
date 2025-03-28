@@ -20,13 +20,13 @@ const MyPage = () => {
   return (
     <div
       className={`min-h-screen flex flex-col items-center justify-center p-6 transition-colors duration-300
-      ${isDarkMode ? "bg-gray-800 text-white" : "bg-pink-50 text-pink-900"}`}
+      ${isDarkMode ? "bg-[#333333] text-white" : "bg-pink-50 text-pink-900"}`}
     >
       <h1 className="text-3xl font-bold mb-8">👤 마이페이지</h1>
 
       <div
         className={`rounded-lg shadow-lg p-6 w-full max-w-md transition-colors duration-300
-      ${isDarkMode ? "bg-gray-700 text-white" : "bg-white text-pink-900"}`}
+      ${isDarkMode ? "bg-[#4C4C4C] text-white" : "bg-white text-pink-900"}`}
       >
         <div className="flex flex-col items-center gap-4">
           <img

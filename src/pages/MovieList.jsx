@@ -51,7 +51,7 @@ const MovieList = () => {
     return (
       <div
         className={`min-h-screen p-10 text-center transition-all duration-300 
-        ${isDarkMode ? "bg-gray-900 text-white" : "bg-pink-100 text-pink-900"}`}
+        ${isDarkMode ? "bg-[#161616] text-white" : "bg-[#E5CACF] text-[#333333]"}`}
       >
         <h1 className="text-3xl mb-5">로딩 중...</h1>
         <SkeletonCard />
@@ -63,7 +63,7 @@ const MovieList = () => {
     return (
       <div
         className={`min-h-screen p-10 text-center transition-all duration-300 
-        ${isDarkMode ? "bg-gray-900 text-white" : "bg-pink-100 text-gray-700"}`}
+        ${isDarkMode ? "bg-[#161616] text-white" : "bg-[#F7C8C9] text-[#4C4C4C]"}`}
       >
         ❌ 오류 발생: {error}
       </div>
@@ -73,7 +73,7 @@ const MovieList = () => {
   return (
     <div
       className={`min-h-screen p-5 transition-all duration-300 
-      ${isDarkMode ? "bg-gray-900 text-white" : "bg-pink-100 text-gray-700"}`}
+      ${isDarkMode ? "bg-[#161616] text-white" : "bg-[#E5CACF] text-[#4C4C4C]"}`}
     >
       {/* 슬라이더 */}
       <MovieSlider movies={movies} />

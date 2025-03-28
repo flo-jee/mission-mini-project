@@ -16,7 +16,7 @@ const MovieSlider = ({ movies }) => {
     <div className="">
       <h2
         className={`text-3xl font-bold mb-3 transition-colors duration-300
-          ${isDarkMode ? "text-whith" : "text-gray-700"}`}
+          ${isDarkMode ? "text-whith" : "text-[#4C4C4C]"}`}
       >
         🔥 인기 영화
       </h2>
@@ -61,7 +61,7 @@ const MovieSlider = ({ movies }) => {
               </div>
 
               {/* ✅ 제목 오버레이 */}
-              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 via-black/50 to-transparent p-2">
+              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/50 to-transparent p-2">
                 <h3 className="text-white text-sm font-bold truncate">
                   {movie.title}
                 </h3>

@@ -20,7 +20,7 @@ const MovieCard = ({ movie }) => {
       to={`${DETAILS_PATH}/${movie.id}`}
       state={{ movie }}
       className={`relative w-full sm:w-[15rem] rounded-xl overflow-hidden flex flex-col justify-between shadow-lg transition-all duration-300 cursor-pointer
-        ${isDarkMode ? "bg-gray-700 text-white" : "bg-purple-100 text-gray-700"}
+        ${isDarkMode ? "bg- text-white" : "bg-[#A06B00] text-[#4C4C4C]"}
         hover:scale-105 hover:shadow-2xl`}
     >
       {/* ✅ 포스터 이미지 */}
@@ -34,14 +34,14 @@ const MovieCard = ({ movie }) => {
         {/* ✅ 평점 뱃지 */}
         <div
           className={`absolute top-2 right-2 px-2 py-1 text-xs rounded-full font-semibold shadow-md
-          ${isDarkMode ? "bg-yellow-600 text-yellow-900" : "bg-yellow-100 text-yellow-900"}`}
+          ${isDarkMode ? "bg-yellow-100/20 text-[#2D1B02]" : "bg-yellow-100/60 text-yellow-900"}`}
         >
           ⭐ {movie.vote_average?.toFixed(1)}
         </div>
       </div>
 
       {/* ✅ 텍스트 영역 */}
-      <div className="flex flex-col gap-2 p-3">
+      <div className="bg-[#4C4C4C] flex flex-col gap-2 p-3 text-white">
         <h3 className="text-lg font-bold truncate">{movieTitle}</h3>
         {/* 버튼 삭제하고 카드 전체를 링크로 변경 */}
       </div>

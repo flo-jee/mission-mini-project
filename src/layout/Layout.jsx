@@ -9,7 +9,7 @@ const Layout = ({ logout }) => {
   return (
     <div
       className={`min-h-screen ${
-        isDarkMode ? "bg-gray-900 text-white" : "bg-pink-100 "
+        isDarkMode ? "bg-[#161616] text-white" : "bg-[#E5CACF] "
       }`}
     >
       {/* ✅ 상단 네비게이션 바 고정 */}

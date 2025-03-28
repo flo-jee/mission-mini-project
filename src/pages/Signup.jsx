@@ -72,12 +72,12 @@ const Signup = () => {
   return (
     <div
       className={`min-h-screen flex justify-center items-center transition-all duration-300
-        ${isDarkMode ? "bg-gray-900 text-white" : "bg-pink-100 text-gray-900"}`}
+        ${isDarkMode ? "bg- text-white" : "bg-[#E5CACF] text-[#161616]"}`}
     >
       <form
         onSubmit={handleSubmit}
-        className={`p-8 rounded-lg shadow-md w-full max-w-md transition-all duration-300
-          ${isDarkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900"}`}
+        className={`p-8 rounded-lg shadow-md w-full max-w-md relative transition-all duration-300
+          ${isDarkMode ? "bg-[#333333] text-white" : "bg-[#FFF3F7] text-[#161616]"}`}
       >
         <h2 className="text-2xl font-bold mb-6 text-center">회원가입</h2>
 
@@ -131,7 +131,7 @@ const Signup = () => {
 
         <button
           type="submit"
-          className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-800 transition mt-4 font-semibold"
+          className="lex items-center justify-center gap-2 w-full py-3 rounded-full text-sm font-semibold bg-[#333333] text-white hover:bg-[#DDA026] font-semibold transition mt-3"
         >
           회원가입
         </button>

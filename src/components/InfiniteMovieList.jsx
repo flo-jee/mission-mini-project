@@ -107,7 +107,7 @@ const InfiniteMovieList = () => {
   return (
     <div
       className={`min-h-screen p-10 transition-all duration-300
-    ${isDarkMode ? "bg-gray-900 text-white" : "bg-pink-100 "}`}
+    ${isDarkMode ? "text-white" : "bg-[#F7C8C9] "}`}
     >
       <div className="flex flex-wrap justify-center gap-4">
         {movies.map((movie) => (
@@ -141,7 +141,7 @@ const InfiniteMovieList = () => {
       )}
 
       {!hasMore && (
-        <div className="text-center text-gray-700 mt-10">
+        <div className="text-center text-[#4C4C4C] mt-10">
           ✅ 모든 페이지를 다 불러왔어요!
         </div>
       )}
