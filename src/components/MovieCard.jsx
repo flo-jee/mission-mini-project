@@ -2,13 +2,15 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import LazyImage from "./LazyImage";
+import { IMAGE_SIZE } from "../constants/imageSize"; // ✅ 이미지 사이즈 상수 import
 
-const BASE_IMG_URL = "https://image.tmdb.org/t/p/w500";
 const PLACEHOLDER_IMG_URL = "https://via.placeholder.com/500x750?text=No+Image";
 const DETAILS_PATH = "/details";
 
 const getPosterUrl = (posterPath) => {
-  return posterPath ? `${BASE_IMG_URL}${posterPath}` : PLACEHOLDER_IMG_URL;
+  return posterPath
+    ? `https://image.tmdb.org/t/p/${IMAGE_SIZE.MEDIUM}${posterPath}` // ✅ w342로 변경
+    : PLACEHOLDER_IMG_URL;
 };
 
 const MovieCard = ({ movie }) => {

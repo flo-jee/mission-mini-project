@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useLocation, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async"; // ✅ Helmet 추가
+import { IMAGE_SIZE } from "../constants/imageSize"; // ✅ 사이즈 상수 import
 
 const ACCESS_TOKEN = import.meta.env.VITE_TMDB_ACCESS_TOKEN;
-const BASE_IMG_URL = "https://image.tmdb.org/t/p/w500";
-const BASE_BACKDROP_URL = "https://image.tmdb.org/t/p/w1280";
+const BASE_IMG_URL = `https://image.tmdb.org/t/p/${IMAGE_SIZE.LARGE}`;
+const BASE_BACKDROP_URL = `https://image.tmdb.org/t/p/${IMAGE_SIZE.BACKDROP}`;
 
 const MovieDetail = () => {
   const { id } = useParams();
