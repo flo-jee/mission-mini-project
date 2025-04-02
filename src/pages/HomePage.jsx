@@ -42,9 +42,6 @@ const HomePage = () => {
         ) : (
           <>
             <MovieList />
-            <h2 className="text-2xl font-bold my-7 text-center">
-              🎬 추가 영화 더 보기
-            </h2>
             <InfiniteMovieList />
           </>
         )}

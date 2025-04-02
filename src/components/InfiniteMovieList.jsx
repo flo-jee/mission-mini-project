@@ -13,9 +13,8 @@ const InfiniteMovieList = () => {
   const [hasMore, setHasMore] = useState(true);
   const { isDarkMode } = useTheme();
 
-  const observerRef = useRef(null); // 하단 감지용 ref
+  const observerRef = useRef(null);
 
-  // ✅ 영화 데이터 가져오기 (loading, hasMore는 내부에서만 체크)
   const fetchMovies = useCallback(
     async (pageToFetch) => {
       if (loading || !hasMore) return;
@@ -24,7 +23,7 @@ const InfiniteMovieList = () => {
       setError(null);
 
       try {
-        console.log(`📡 페이지 ${pageToFetch} 영화 요청 중...`);
+        console.log(`📱 페이지 ${pageToFetch} 영화 요청 중...`);
 
         const response = await fetch(
           `https://api.themoviedb.org/3/movie/top_rated?language=ko-KR&page=${pageToFetch}`,
@@ -37,28 +36,25 @@ const InfiniteMovieList = () => {
           },
         );
 
-        if (!response.ok)
+        if (!response.ok) {
           throw new Error(`HTTP 오류! 상태 코드: ${response.status}`);
+        }
 
         const data = await response.json();
         console.log("✅ 영화 데이터 도착:", data);
 
-        // 중복 제거 후 새로운 영화 추가
         setMovies((prev) => {
-          const existingIds = new Set(prev.map((movie) => movie.id));
-          const newMovies = data.results.filter(
-            (movie) => !existingIds.has(movie.id),
-          );
+          const existingIds = new Set(prev.map((m) => m.id));
+          const newMovies = data.results.filter((m) => !existingIds.has(m.id));
           return [...prev, ...newMovies];
         });
 
-        // 마지막 페이지 확인
         if (data.results.length === 0 || pageToFetch >= data.total_pages) {
-          console.log("🚫 더 이상 데이터 없음!");
+          console.log("🚫 더 이상 데이터 없음");
           setHasMore(false);
         }
       } catch (err) {
-        console.error("❌ 영화 가져오기 실패:", err);
+        console.error("❌ 에러 발생:", err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -67,58 +63,56 @@ const InfiniteMovieList = () => {
     [loading, hasMore],
   );
 
-  // ✅ 페이지가 바뀔 때만 fetch 실행 (무한 루프 방지!)
   useEffect(() => {
     if (hasMore) {
       fetchMovies(page);
     }
   }, [page]);
 
-  // ✅ IntersectionObserver (하단에 닿으면 페이지 +1)
   useEffect(() => {
-    if (!hasMore) return;
+    if (!hasMore || loading) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         const target = entries[0];
         if (target.isIntersecting && !loading) {
-          console.log("👇 하단 감지됨! 다음 페이지 요청 준비");
+          console.log("👇 하단 감지됨 → 페이지 +1");
           setPage((prev) => prev + 1);
         }
       },
       {
         root: null,
-        rootMargin: "100px", // 하단 여백 조정 가능
-        threshold: 1.0,
+        rootMargin: "100px",
+        threshold: 0,
       },
     );
 
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
-    }
+    const currentRef = observerRef.current;
+    if (currentRef) observer.observe(currentRef);
 
     return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
-      }
+      if (currentRef) observer.unobserve(currentRef);
     };
   }, [loading, hasMore]);
 
   return (
     <div
-      className={`min-h-screen p-10 transition-all duration-300
-    ${isDarkMode ? "text-white" : "bg-[#F7C8C9] "}`}
+      className={`min-h-screen p-10 transition-all duration-300 ${
+        isDarkMode ? "bg-[#161616] text-white" : "bg-[#F7C8C9] text-[#4C4C4C]"
+      }`}
     >
-      <div className="flex flex-wrap justify-center gap-4">
-        {movies.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
-        ))}
+      <div className="w-full max-w-screen-xl px-4 mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          {movies.map((movie) => (
+            <MovieCard key={movie.id} movie={movie} />
+          ))}
+        </div>
       </div>
 
       {loading && (
-        <div className="flex justify-center gap-4 mt-10">
-          {[...Array(3)].map((_, index) => (
-            <SkeletonCard key={`skeleton-${index}`} />
+        <div className="flex flex-wrap justify-start gap-4 mt-10">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <SkeletonCard key={`skeleton-${i}`} />
           ))}
         </div>
       )}
@@ -129,20 +123,16 @@ const InfiniteMovieList = () => {
         </div>
       )}
 
-      {/* 감지용 트리거 */}
       {hasMore && (
         <div
           ref={observerRef}
-          style={{
-            height: "100px",
-            backgroundColor: "transparent",
-          }}
+          style={{ height: "100px", backgroundColor: "transparent" }}
         />
       )}
 
       {!hasMore && (
-        <div className="text-center text-[#4C4C4C] mt-10">
-          ✅ 모든 페이지를 다 불러왔어요!
+        <div className="text-center text-sm text-gray-500 mt-10">
+          ✅ 모든 영화를 다 불러왔어요!
         </div>
       )}
     </div>
