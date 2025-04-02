@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 const LazyImage = ({ src, alt, className }) => {
-  const imgRef = useRef(null);
+  const containerRef = useRef(null); // ✅ div에 붙일 ref
   const [isVisible, setIsVisible] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
@@ -13,24 +13,24 @@ const LazyImage = ({ src, alt, className }) => {
       }
     });
 
-    if (imgRef.current) observer.observe(imgRef.current);
+    if (containerRef.current) observer.observe(containerRef.current);
     return () => observer.disconnect();
   }, []);
 
   return (
-    <div className="relative w-full h-full bg-gray-300 animate-pulse rounded-xl overflow-hidden">
+    <div ref={containerRef} className={`relative w-full h-full`}>
+      {!loaded && (
+        <div className="absolute inset-0 bg-gray-300 animate-pulse rounded-xl z-0" />
+      )}
       {isVisible && (
         <img
-          ref={imgRef}
           src={src}
           alt={alt}
-          className={`${className} ${loaded ? "opacity-100" : "opacity-0"} transition-opacity duration-500`}
+          className={`transition-opacity duration-500 ${loaded ? "opacity-100" : "opacity-0"} ${className}`}
           loading="lazy"
           onLoad={() => setLoaded(true)}
         />
       )}
-      {/* 로딩 완료되면 배경 스켈레톤 제거 */}
-      {loaded && <div className="absolute inset-0 bg-transparent" />}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useTheme } from "../context/ThemeContext"; // ✅ 다크모드 context 사용
+import { useTheme } from "../context/ThemeContext";
+import LazyImage from "./LazyImage";
 
 const BASE_IMG_URL = "https://image.tmdb.org/t/p/w500";
 const PLACEHOLDER_IMG_URL = "https://via.placeholder.com/500x750?text=No+Image";
@@ -20,15 +21,15 @@ const MovieCard = ({ movie }) => {
       to={`${DETAILS_PATH}/${movie.id}`}
       state={{ movie }}
       className={`relative w-full sm:w-[15rem] rounded-xl overflow-hidden flex flex-col justify-between shadow-lg transition-all duration-300 cursor-pointer
-        ${isDarkMode ? "bg- text-white" : "bg-[#A06B00] text-[#4C4C4C]"}
+        ${isDarkMode ? "bg-[#1e1e1e] text-white" : "bg-[#A06B00] text-[#4C4C4C]"}
         hover:scale-105 hover:shadow-2xl`}
     >
-      {/* ✅ 포스터 이미지 */}
-      <div className="relative">
-        <img
+      {/* ✅ 포스터 이미지 (Lazy Load + 고정 높이) */}
+      <div className="relative w-full h-[22rem]">
+        <LazyImage
           src={posterUrl}
           alt={movieTitle}
-          className="w-full h-[22rem] object-cover"
+          className="w-full h-full object-cover rounded-xl"
         />
 
         {/* ✅ 평점 뱃지 */}
@@ -43,7 +44,6 @@ const MovieCard = ({ movie }) => {
       {/* ✅ 텍스트 영역 */}
       <div className="bg-[#4C4C4C] flex flex-col gap-2 p-3 text-white">
         <h3 className="text-lg font-bold truncate">{movieTitle}</h3>
-        {/* 버튼 삭제하고 카드 전체를 링크로 변경 */}
       </div>
     </Link>
   );
