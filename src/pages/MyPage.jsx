@@ -3,7 +3,7 @@ import useUser from "../context/UserContext"; // 전역 유저 정보 가져오�
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext"; // ✅ 다크모드 상태 가져오기
 
-const DEFAULT_PROFILE_IMAGE = "movie-clapperboard-part-2-svgrepo-com.png";
+const DEFAULT_PROFILE_IMAGE = "movie.png";
 
 const MyPage = () => {
   const { user } = useUser(); // 현재 로그인한 유저 정보

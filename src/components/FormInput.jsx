@@ -9,6 +9,7 @@ const FormInput = ({
   error,
   placeholder,
   autoComplete = "off",
+  isDarkMode,
 }) => {
   return (
     <div className="mb-4">
@@ -23,9 +24,10 @@ const FormInput = ({
         onChange={onChange}
         placeholder={placeholder}
         autoComplete={autoComplete} // ✅ 추가된 부분
-        className={`w-full p-2 border rounded ${
-          error ? "border-red-500" : "border-gray-300"
-        }`}
+        className={`w-full p-2 border rounded transition-all duration-300
+          ${error ? "border-red-500" : isDarkMode ? "border-gray-600" : "border-gray-300"}
+          ${isDarkMode ? "bg-[#333333] text-white placeholder-gray-400" : "bg-white text-black placeholder-gray-500"}
+        `}
       />
       {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
     </div>

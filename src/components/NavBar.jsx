@@ -8,7 +8,7 @@ import { Moon, Sun, Search, Menu } from "lucide-react";
 import lightLogo from "/assets/movieLOGO_RGB_LI_Y.png";
 import darkLogo from "/assets/movieLOGO_RGB_DK_L_Y.png";
 
-const DEFAULT_PROFILE_IMAGE = "movie-clapperboard-part-2-svgrepo-com.png";
+const DEFAULT_PROFILE_IMAGE = "movie.png";
 
 const NavBar = () => {
   const navigate = useNavigate();

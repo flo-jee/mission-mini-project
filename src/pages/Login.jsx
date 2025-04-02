@@ -88,7 +88,7 @@ const Login = () => {
   return (
     <div
       className={`min-h-screen flex justify-center items-center transition-all duration-300 
-        ${isDarkMode ? "bg-[#1e1e1e] text-white" : "bg-[#E5CACF] text-[#161616]"}`}
+        ${isDarkMode ? "bg-[#1e1e1e] text-[#ffffff]" : "bg-[#E5CACF] text-[#161616]"}`}
     >
       <form
         onSubmit={handleSubmit}
@@ -104,6 +104,7 @@ const Login = () => {
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              v
             >
               <path
                 strokeLinecap="round"
